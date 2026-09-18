@@ -1,6 +1,12 @@
 -- Reffime database schema
 create extension if not exists pgcrypto;
 
+create table if not exists public.newsletter_subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text unique not null,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists public.products (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
@@ -34,8 +40,10 @@ create table if not exists public.site_settings (
 
 insert into public.site_settings (id) values (1) on conflict (id) do nothing;
 
+alter table public.newsletter_subscribers enable row level security;
 alter table public.products enable row level security;
 alter table public.site_settings enable row level security;
+create policy "Public can subscribe" on public.newsletter_subscribers for insert to anon, authenticated with check (length(trim(email)) >= 5 and position('@' in email) > 1);
 
 create policy "Public can read visible products" on public.products for select using (visible = true);
 create policy "Public can read site settings" on public.site_settings for select using (true);
