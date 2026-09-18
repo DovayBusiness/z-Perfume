@@ -25,6 +25,10 @@ create table if not exists public.site_settings (
   hero_text text not null default 'Modern fragrance, made personal.',
   hero_image_url text,
   whatsapp_number text not null default '2349073924215',
+  theme_preset text not null default 'coral-sage',
+  accent_color text not null default '#ef795b',
+  background_color text not null default '#fbf8f3',
+  text_color text not null default '#152522',
   updated_at timestamptz not null default now()
 );
 
