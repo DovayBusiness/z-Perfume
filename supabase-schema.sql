@@ -49,4 +49,6 @@ values
 on conflict (slug) do nothing;
 
 -- Run this after creating a private storage bucket named product-images.
--- Storage policies can then be added for authenticated admins.
+create policy "Authenticated admins upload product images" on storage.objects for insert to authenticated with check (bucket_id = 'product-images');
+create policy "Authenticated admins update product images" on storage.objects for update to authenticated using (bucket_id = 'product-images') with check (bucket_id = 'product-images');
+create policy "Authenticated admins delete product images" on storage.objects for delete to authenticated using (bucket_id = 'product-images');
